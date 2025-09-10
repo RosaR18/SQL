@@ -1,0 +1,83 @@
+# For this final SQL project, I'm querying a digital media store database with multiple tables in it to analyze information regarding artists, albums, media tracks, invoices, and customers.
+
+#1. Show Customers (their full names, customer ID, and country) who are not in the US. (Hint: != or <> can be used to say "is not equal to").
+
+SELECT 
+ customers.firstname
+,customers.lastname
+,customers.customerid
+,customers.country
+FROM chinook.customers
+
+WHERE customers.country<>'USA'
+
+LIMIT 20;
+
+#2. Show only the Customers from Brazil.
+
+SELECT 
+ customers.firstname
+,customers.lastname
+FROM chinook.customers
+
+WHERE country ='Brazil';
+
+#3. Find the Invoices of customers who are from Brazil. The resulting table should show the customer's full name, Invoice ID, Date of the Invoice, and billing country. 
+
+SELECT 
+ customers.FirstName
+,customers.LastName
+,invoices.invoiceid
+,invoices.invoicedate
+,invoices.billingcountry
+FROM chinook.invoices
+
+LEFT JOIN chinook.customers
+ON invoices.customerid=customers.customerid
+
+WHERE invoices.billingcountry='Brazil';
+
+#4. Show the Employees who are Sales Agents.
+
+SELECT 
+ employees.firstname
+,employees.lastname
+,employees.title
+FROM chinook.employees
+
+WHERE employees.title= 'Sales Support Agent';
+
+#5. Find a unique/distinct list of billing countries from the Invoice table.
+
+SELECT DISTINCT invoices.billingcountry
+FROM chinook.invoices;
+
+#6. How many Invoices were there in 2009?
+
+SELECT 
+COUNT (*)
+FROM chinook.invoices
+
+WHERE invoicedate BETWEEN '2009-01-01' AND '2009-12-31';
+
+#7. Provide a query that shows all the Tracks, and include the Album name, Media type, and Genre.
+
+SELECT 
+tracks.trackid
+,tracks.name as TrackName
+,albums.title as AlbumTitle
+,media_types.mediatypeid
+,genres.GenreId
+
+FROM chinook.tracks
+LEFT JOIN chinook.albums
+
+ON tracks.AlbumId=albums.AlbumId
+
+LEFT JOIN chinook.genres
+
+ON tracks.genreid=genres.genreid
+
+LEFT JOIN chinook.media_types
+
+ON tracks.mediatypeid=media_types.MediaTypeId;
